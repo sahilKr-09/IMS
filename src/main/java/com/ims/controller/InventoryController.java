@@ -1,6 +1,6 @@
-
-
 package com.ims.controller;
+
+import com.ims.dto.OrderRequestWrapper;
 import com.ims.entity.Order;
 import com.ims.entity.Product;
 import com.ims.service.InventoryService;
@@ -21,15 +21,17 @@ public class InventoryController {
         this.inventoryService = inventoryService;
     }
 
-    @PostMapping("/product")
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
-        return ResponseEntity.ok(inventoryService.createProduct(product));
-    }
-
     @GetMapping("/ping")
     public String checkServerSatus() {
         log.info("checkServerSatus");
         return "Server is running";
+    }
+
+    // --- Product APIs ---
+
+    @PostMapping("/product")
+    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
+        return ResponseEntity.ok(inventoryService.createProduct(product));
     }
 
     @GetMapping("/products")
@@ -53,13 +55,11 @@ public class InventoryController {
         return ResponseEntity.noContent().build();
     }
 
-    // --- Order APIs ---
+    // --- Order APIs (Updated) ---
 
     @PostMapping("/order")
-    public ResponseEntity<Order> placeOrder(@RequestParam Long productId,
-                                            @RequestParam Integer quantity,
-                                            @RequestParam String emailAddress) {
-        return ResponseEntity.ok(inventoryService.placeOrder(productId, quantity, emailAddress));
+    public ResponseEntity<Order> placeOrder(@RequestBody OrderRequestWrapper request) {
+        return ResponseEntity.ok(inventoryService.placeOrder(request.getItems(), request.getEmailAddress()));
     }
 
     @GetMapping("/orders/{id}")

@@ -1,5 +1,6 @@
 package com.ims.service;
 
+import com.ims.dto.OrderItemRequest;
 import com.ims.entity.Order;
 import com.ims.entity.Product;
 
@@ -17,7 +18,7 @@ public interface InventoryService {
 
     void deleteProduct(Long id);
 
-    Order placeOrder(Long productId, Integer quantity, String emailAddress);
+    Order placeOrder(List<OrderItemRequest> items, String emailAddress);
 
     Order getOrderById(Long id);
 }

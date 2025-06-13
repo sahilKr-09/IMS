@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -15,24 +16,20 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonProperty("product")
-    @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
-
-    @JsonProperty("quantity")
-    @Column(nullable = false)
-    private Integer quantity;
-
-    @JsonProperty("total_price")
-    @Column(nullable = false)
-    private Double totalPrice;
+    @JsonProperty("order_items")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<OrderItem> orderItems;  // List of items in the order
 
     @JsonProperty("emailAddress")
     @Column(nullable = false)
-    private  String emailAddress;
+    private String emailAddress;
+
+    @JsonProperty("total_price")
+    @Column(nullable = false)
+    private Double totalPrice;  // Total price for the order
 
     @JsonProperty("timestamp")
     @Column(nullable = false)
     private LocalDateTime timestamp;
+
 }
